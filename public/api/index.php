@@ -12,7 +12,7 @@ $method = $_SERVER['REQUEST_METHOD']; # innehåller ex: POST, PUT, DELETE, GET
 $resource = $url_parts[0];
 $data = getHTTPData($method);
 
-$allowed_resources = ['user', 'help', 'helplist'];
+$allowed_resources = ['grades'];
 
 if(in_array($resource, $allowed_resources)){
   require_once($resource.".class.php");
