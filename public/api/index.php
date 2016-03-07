@@ -57,3 +57,14 @@ function getUrlParts($get){
 
   return $url_parts; 
 }
+
+function deliver_respone($status,$status_message,$data){
+    header("HTTP/1.1 $status $status_message");
+
+    $respone['status']=$status;
+    $respone['status_message']=$status_message;
+    $respone['data']=$data;
+
+    $json_response=json_encode($respone);
+    echo $json_response;
+  }
