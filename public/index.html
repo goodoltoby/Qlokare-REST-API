@@ -1,0 +1,51 @@
+<html>
+<head>
+<title>Hjälplistan</title>
+<script src="jquery.js"></script>
+
+<script>
+	$(document).ready(function(){
+
+ 	setInterval(getList, 1000);
+
+	function getList(){	
+ 	$.ajax({ 
+         type: "GET",
+         dataType: "json",
+         url: "/api/?/helplist",
+         success: function(data){        
+            loadList(data);
+         }
+     });
+
+	}
+
+	});
+
+	function loadList(data){
+		$("#list").html("");
+		$.each(data,function(value,obj){
+			
+			$("<div>").attr('obj_id',obj.id).text(obj.realname + " " + obj.signup_time).appendTo( "#list" ).click(function(e){
+					var id = $(e.target).attr('obj_id');
+				    $.ajax({ 
+			         type: "PUT",
+			         dataType: "json",
+			         url: "/api/?/help/"+id,
+			         data: {'done_time': '2016-01-26 01:01:01'},
+			         success: function(data){        
+			            console.log(data);
+			         }
+			     });
+				});
+		});
+	}
+</script>
+
+</head>
+<body>
+<div id='list'>
+
+</div>
+</body>
+</html>
