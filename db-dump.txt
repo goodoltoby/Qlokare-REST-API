@@ -1,0 +1,16 @@
+-- Adminer 4.2.2 MySQL dump
+
+SET NAMES utf8;
+SET time_zone = '+00:00';
+SET foreign_key_checks = 0;
+SET sql_mode = 'NO_AUTO_VALUE_ON_ZERO';
+
+DROP TABLE IF EXISTS `student_grades`;
+CREATE TABLE `student_grades` (
+  `person_nr` int(11) NOT NULL,
+  `course_id` int(11) NOT NULL,
+  `grades` varchar(10) COLLATE utf8_bin NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+
+
+-- 2016-03-07 13:26:51
