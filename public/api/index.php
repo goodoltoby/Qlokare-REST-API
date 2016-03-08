@@ -1,7 +1,6 @@
 <?php
 header('Content-Type: text/json');
 
-
 function __autoload($class){
   require_once($class.".class.php");
 }
@@ -11,18 +10,17 @@ $url_parts = getUrlParts($_GET);
 $method = $_SERVER['REQUEST_METHOD']; # innehåller ex: POST, PUT, DELETE, GET
 $resource = $url_parts[0];
 $data = getHTTPData($method);
-
-$allowed_resources = ['grades'];
-
+$allowed_resources = ['grades','students','course'];
 if(in_array($resource, $allowed_resources)){
   require_once($resource.".class.php");
   $id = (isset($url_parts[1])) ? $url_parts[1] : NULL;
+  $prefix = (isset($url_parts[2])) ? $url_parts[2] : NULL;
+  var_dump($prefix);
   $obj = new $resource($id);
-  $obj->$method($data); 
+  $obj->$method($data,$prefix); 
 }else{
   header("HTTP/1.1 404 Not Found");
 }
-
 
 
 
