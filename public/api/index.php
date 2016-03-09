@@ -10,14 +10,16 @@ $url_parts = getUrlParts($_GET);
 $method = $_SERVER['REQUEST_METHOD']; # innehåller ex: POST, PUT, DELETE, GET
 $resource = $url_parts[0];
 $data = getHTTPData($method);
-$allowed_resources = ['grades','students','course'];
+
+$allowed_resources = ['courses'];
+
 if(in_array($resource, $allowed_resources)){
   require_once($resource.".class.php");
   $id = (isset($url_parts[1])) ? $url_parts[1] : NULL;
   $prefix = (isset($url_parts[2])) ? $url_parts[2] : NULL;
-  var_dump($prefix);
-  $obj = new $resource($id);
-  $obj->$method($data,$prefix); 
+  //var_dump($prefix);
+  $obj = new $resource($id,$prefix);
+  $obj->$method($data); 
 }else{
   header("HTTP/1.1 404 Not Found");
 }
@@ -56,13 +58,3 @@ function getUrlParts($get){
   return $url_parts; 
 }
 
-function deliver_respone($status,$status_message,$data){
-    header("HTTP/1.1 $status $status_message");
-
-    $respone['status']=$status;
-    $respone['status_message']=$status_message;
-    $respone['data']=$data;
-
-    $json_response=json_encode($respone);
-    echo $json_response;
-  }
