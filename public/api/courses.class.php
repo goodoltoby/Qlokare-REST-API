@@ -1,116 +1,109 @@
 <?php
 
 class courses{
-    public $id, $grades, $prefix;
+  public $id, $grades, $prefix;
 
-    public function __construct($id = NULL, $prefix = NULL){
+  public function __construct($id = NULL, $prefix = NULL){
     if($id){
       $this->id = $id;
-      $this->prefix = $prefix;
-      
-      /*$db = DB::getInstance();
-
-      $id = $db->real_escape_string($id); 
-      $query = "SELECT person_nr, grades, course_id FROM student_grades WHERE course_id='$id'";
-      $result = $db->query($query);
-      $user = $result->fetch_assoc();
-
-
-      $this->grades = $user['course_id'];*/
+      $this->prefix = $prefix;     
     }
   }
 
   public function get($data){
-  $db = DB::getInstance();
-
+    $db = DB::getInstance();
+    //gets grades and users
     if($this->prefix == 'grades'){
-          $query = "SELECT grades, user_id FROM student_grades
-          where course_id = '$this->id'";
+      $query = "SELECT grades, user_id FROM student_grades
+      where course_id = '$this->id'";
 
-          $result = $db->query($query);
-          while($item = $result->fetch_assoc()){
-          $gradeitems[] = $item;
+      $result = $db->query($query);
+      while($item = $result->fetch_assoc()){
+        $gradeitems[] = $item;
+      }
+      echo json_encode($gradeitems);
     }
-     echo json_encode($gradeitems);
-    }
+
     elseif(!$this->id){
-         $query = "SELECT DISTINCT course_id FROM student_grades";
+      //gets all unique courses
+      $query = "SELECT DISTINCT course_id FROM student_grades";
 
-          $result = $db->query($query);
-          while($item = $result->fetch_assoc()){
-           $gradeitems[] = $item;
-    }
-    echo json_encode($gradeitems);
+      $result = $db->query($query);
+      while($item = $result->fetch_assoc()){
+        $gradeitems[] = $item;
+      }
+      echo json_encode($gradeitems);
     }
     
-  elseif($this->id){
-    $query = "SELECT * FROM student_grades
-          where course_id = $this->id";
+    elseif($this->id){
+      //gets user, course and grades
+      $query = "SELECT * FROM student_grades
+        where course_id = $this->id";
 
-          $result = $db->query($query);
-          while($item = $result->fetch_assoc()){
-          $gradeitems[] = $item;
-  }
-       echo json_encode($gradeitems);
-}
+      $result = $db->query($query);
+      while($item = $result->fetch_assoc()){
+        $gradeitems[] = $item;
+      }
+      echo json_encode($gradeitems);
+    }
+
     else{
+      //gets it all
+      $query = "SELECT * FROM student_grades
+      ";
 
-          $query = "SELECT * FROM student_grades
-          ";
-
-          $result = $db->query($query);
-          while($item = $result->fetch_assoc()){
-                $gradeitems[] = $item;
-          }
-          echo json_encode($gradeitems);
+      $result = $db->query($query);
+      while($item = $result->fetch_assoc()){
+        $gradeitems[] = $item;
+      }
+      echo json_encode($gradeitems);
+    }
   }
 
-
-}
-
-
-public function put($data){
+  public function put($data){
     $db = DB::getInstance();
-  
-    $grades = $db->real_escape_string($data['grades']); 
-    $user_id = $db->real_escape_string($data['user_id']); 
-    $course_id = $db->real_escape_string($data['course_id']); 
+    
+    if($this->prefix == 'grades'){
+      $grades = $db->real_escape_string($data['grades']); 
+      $user_id = $db->real_escape_string($data['user_id']); 
+      //$course_id = $db->real_escape_string($data['course_id']); 
 
-   
-
-    $query = "
-      UPDATE student_grades 
-      SET grades = '$grades'
-      WHERE user_id = $user_id AND course_id = $course_id
-      ";
+      //puts (updates) grades
+      $query = "
+        UPDATE student_grades 
+        SET grades = '$grades'
+        WHERE user_id = $user_id AND course_id = $this->id
+        ";
+    }
 
     if($db->query($query)){
       $respons = ['status' => 'ok'];
     }else{
       $respons = ['status' => 'fail'];
     }
-
     echo json_encode($respons);
   }
 
 public function post($data){
-    $db = DB::getInstance();
-    $user_id = $db->real_escape_string($data['user_id']);
-    $grades = $db->real_escape_string($data['grades']);
-    $course_id = $db->real_escape_string($data['course_id']);
+  $db = DB::getInstance();
 
-    $query = "
-        INSERT INTO student_grades
-        (user_id, course_id, grades)
-        VALUES
-        ('$user_id', '$course_id', '$grades') ";
+  $user_id = $db->real_escape_string($data['user_id']);
+  $grades = $db->real_escape_string($data['grades']);
+  $course_id = $db->real_escape_string($data['course_id']);
+
+  //posts (inserts) user, course and grade
+  $query = "
+    INSERT INTO student_grades
+    (user_id, course_id, grades)
+    VALUES
+    ('$user_id', '$course_id', '$grades') ";
 
     
- if($db->query($query)){
+  if($db->query($query)){
       $respons = ['status' => 'ok'];
     }else{
       $respons = ['status' => 'fail'];
     }
-echo json_encode($respons);
+  echo json_encode($respons);
   }
 }

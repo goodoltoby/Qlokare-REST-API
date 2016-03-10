@@ -1,3 +1,4 @@
 .vagrant
 Vagrantfile
 .DS_Store
+db.conf.php

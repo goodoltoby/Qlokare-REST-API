@@ -1,5 +1,5 @@
 <?php
-define('CONF_DB_SERVER', 'localhost');
-define('CONF_DB_USERNAME', 'root');
-define('CONF_DB_PASSWORD', 'root');
-define('CONF_DB_DATABASE', 'qlokare_grades');
+define('CONF_DB_SERVER', 'qlokarerestapi-214562.mysql.binero.se');
+define('CONF_DB_USERNAME', '214562_oe94369');
+define('CONF_DB_PASSWORD', 'Hejaaik123');
+define('CONF_DB_DATABASE', '214562-qlokarerestapi');
